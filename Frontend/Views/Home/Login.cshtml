@@ -1,0 +1,57 @@
+﻿@model Frontend.Models.login
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<br />
+
+@using (Html.BeginForm("Login", "Home", FormMethod.Post))
+{
+<fieldset>
+    <legend style="text-align: center;">¡Bienvenido!</legend>
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @if (@ViewBag.Message != null)
+    {
+        <div style="color: red; font-weight: bold; text-align: center;">
+            @ViewBag.Message
+        </div>
+        <br />
+    }
+
+    <table align="center">
+        <tr>
+            <td>Usuario&nbsp;</td>
+            <td>@Html.TextBoxFor(a => a.usuario)</td>
+            <td>@Html.ValidationMessageFor(a => a.usuario)</td>
+        </tr>
+        <tr>
+            <td>
+                Clave&nbsp;
+            </td>
+            <td>
+                @Html.PasswordFor(a => a.clave)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(a => a.clave)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                &nbsp;
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" class="btn btn-primary" value="Ingresar a mi banca" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</fieldset>
+}  

@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "Mis Cuentas";
+}
+
+<br />
+
+<fieldset>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label style="font-size: x-large; font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif; font-weight: bold;"> Mis Cuentas </label>
+        </div>
+
+        <div class="col-md-6">
+            @if (Session["UserName"] != null)
+            {
+                <label style="float: right; font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;">
+                    Bienvenid@@ @Session["UserName"].ToString()
+                </label>
+            }
+        </div>
+    </div>
+
+</fieldset>
+<hr />
+
+<div ng-app="app" ng-controller="CuentasController as $ctrl">
+
+    <input hidden id="id_usuario" value="@ViewBag.id_usuario" />
+
+    <div id="loading" ng-show="$ctrl.loading">
+        <img src="~/Images/ring.gif" class="ajax-loader" />
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Cuenta</th>
+                <th scope="col">Banco</th>
+                <th style="text-align: right;" scope="col">Saldo</th>
+                <th style="text-align: center;" scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in $ctrl.data.cuentas">
+                <td style="vertical-align: middle;"><span ng-bind="(item.nombre)"></span></td>
+                <td style="vertical-align: middle;"><span ng-bind="(item.banco)"></span></td>
+                <td style="vertical-align: middle;text-align: right;">$<span ng-bind="(item.saldo | number:0)"></span></td>
+                <td style="vertical-align: middle;text-align: center;">
+                    <button type="button" class="btn btn-xs btn-success"
+                            ng-click="$ctrl.abrir_transaccion(item)" title="Realizar Transaccion">
+                        <span class="glyphicon glyphicon-credit-card"></span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script type="text/ng-template" id="ModalTransaccion.html">
+        <div class="modal-header" style="font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>Nueva Transaccion </h3>
+                </div>
+                <div class="col-md-4">
+                    <h3>Cuenta: {{$ctrl.item.nombre}}</h3>
+                </div>
+                <div class="col-md-4">
+                    <h3 style="float: right;">Saldo: ${{$ctrl.item.saldo | number:0}}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+
+            <form ng-submit="$ctrl.guardar_transaccion()">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Tipo Transaccion:</label>
+                        <select class="form-control input-sm" ng-model="$ctrl.transaccion.id_tipo_transaccion" ng-change="$ctrl.changue_tipo()">
+                            <option ng-repeat="item in $ctrl.tipo_transaccion" value="{{item.id}}">{{item.nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Monto:</label>
+                        <input class="form-control input-sm" type="text" ng-model="$ctrl.transaccion.monto" />
+                    </div>
+                </div>
+
+                <div class="row" ng-show="$ctrl.show_cuenta_destino">
+                    <div class="col-md-6">
+                        <label>Cuenta Destino:</label>
+                        <select class="form-control input-sm" ng-model="$ctrl.transaccion.id_cuenta_destino">
+                            <option ng-repeat="r in $ctrl.cuentas" value="{{r.id}}">{{r.nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <br />
+                        <button type="submit" class="btn btn-success btn-sm" title="Guardar">
+                            <span class="glyphicon glyphicon-floppy-disk"></span>
+                            Guardar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+
+        </div>
+    </script>
+</div>
+
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/angular-animate.min.js"></script>
+<script src="~/Scripts/App.js"></script>
+<script src="~/Scripts/i18n/angular-locale_es-co.js"></script>
+<script src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+
+<link href="~/Content/angular-ui-switch.min.css" rel="stylesheet" />
+<script src="~/Scripts/angular-ui-switch.min.js"></script>
+
+<script src="~/Scripts/ng-tags-input.min.js"></script>
+<link href="~/Content/ng-tags-input.min.css" rel="stylesheet" />
+<link href="~/Content/ng-tags-input.bootstrap.min.css" rel="stylesheet" />
+
+<link href="~/Content/angular-toastr.min.css" rel="stylesheet" />
+<script src="~/Scripts/angular-toastr.tpls.min.js"></script>
+
+<script src="~/Scripts/App/Cuentas.js"></script>
